@@ -48,50 +48,51 @@ new Vue ({
         monsterAttacks: function() {
             let damage = Math.floor((Math.random() * 20) + 1);
             this.playerHealthbarWidth -= damage;
-
             this.turns.unshift({
                 isMonster: true,
                 text: `Monster hits the Player for ${damage}`
             })
-
             this.checkWin();
         },
 
         attack: function() {
             let damage = Math.floor((Math.random() * 20) + 1);
             this.monsterHealthbarWidth -= damage;
-
             this.turns.unshift({
                 isPlayer: true,
                 text: `Player hits the Monster for ${damage}`
             })
-            
             this.monsterAttacks();
-            
             this.checkWin();
-
         },
 
         onSpecialAttackClick() {
             let specialDamage = Math.floor((Math.random() * 20) + 1) + 10;
             this.monsterHealthbarWidth -= specialDamage;
-
             this.turns.unshift({
                 isSpecial: true,
                 text: `Player hit the Monster with Special Attack for ${specialDamage}`
             })
             this.monsterAttacks();
-            
             this.checkWin();
         },
 
         onHealClick: function() {
-            let addHealth = Math.floor((Math.random() * 10) + 10)
-            this.playerHealthbarWidth += addHealth;
-            this.turns.unshift({
-                isHealed: true,
-                text: `Player healed for ${addHealth}`
-            })
+            const addHealth = 10;
+            if (this.playerHealthbarWidth <= 90) {
+                this.playerHealthbarWidth += addHealth;
+                this.turns.unshift({
+                    isHealed: true,
+                    text: `Player healed for ${addHealth}`
+                })
+            }
+            else {
+                this.turns.unshift({
+                    isHealed: true,
+                    text: `Player healed for ${100 - this.playerHealthbarWidth}`
+                })
+                this.playerHealthbarWidth = 100;
+            }
             
             this.monsterAttacks();
         },
